@@ -17,7 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from medical_notes.views import MedicalNotesListView
+# from try3.my_model_code import predict_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('regular_user.urls')),
+    path('notes/', include('medical_notes.urls')),
+    path('flashcards/', include('flashcards.urls')),
+    path('chatbot/', include('chatbot.urls'))
 ]
