@@ -1,24 +1,23 @@
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from dj_rest_auth.serializers import LoginSerializer
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
-
-from regular_user.models import RegularUser
+from dj_rest_auth.serializers import LoginSerializer
+from .models import RegularUser
 
 
 class RegularUserSerializerAll(serializers.ModelSerializer):
     class Meta:
         model = RegularUser
-        fields = ['id', 'username', 'email', 'password', 'profile_picture']
+        fields = ['id', 'username', 'email', 'password', 'profile_picture', 'first_name', 'last_name']
 
 
-class AuthentificationSerializer(LoginSerializer, serializers.ModelSerializer):
+class AuthentificationSerializer(LoginSerializer):
     username = serializers.CharField(max_length=100)
     password = serializers.CharField(max_length=100)
 
     class Meta:
         model = RegularUser
-        fields = ['username', 'password']
+        fields = ['username', 'password', 'first_name', 'last_name', 'email']
 
     def validate(self, attrs):
         username = attrs.get('username')

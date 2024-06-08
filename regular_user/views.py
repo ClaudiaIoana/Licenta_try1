@@ -16,6 +16,19 @@ class RegularUserListView(viewsets.ModelViewSet):
     queryset = RegularUser.objects.all()
     serializer_class = RegularUserSerializerAll
 
+    def list(self, request, *args, **kwargs):
+        tokens = Token.objects.all()
+
+        if 'HTTP_AUTHORIZATION' in request.META:
+            token = request.META['HTTP_AUTHORIZATION']
+        else:
+            return Response({'Unauthorized': 'Unauthorized'}, status=401)
+        for to in tokens:
+            if to.key == token:
+                the_user = to.user
+        if the_user is not None:
+            return Response(RegularUserSerializerAll(the_user).data)
+        return Response({'Unauthorized': 'Unauthorized'}, status=401)
 
 class RegularUserRegisterView(RegisterView):
     serializer_class = RegularUserSerializer
